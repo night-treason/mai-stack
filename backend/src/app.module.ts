@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProjectsModule } from './projects/projects.module';
-import { Project } from './projects/entities/project.entity';
+import { ProductsModule } from './products/products.module';
+import { Product } from './products/entities/product.entity';
 
 @Module({
   imports: [
@@ -12,14 +12,14 @@ import { Project } from './projects/entities/project.entity';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      database: 'projects',
+      password: 'pass',
+      database: 'products',
       synchronize: false,
-      entities: [Project]
+      entities: [Product],
     }),
-    ProjectsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule {}

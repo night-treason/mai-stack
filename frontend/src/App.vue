@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import DisplayProjects from './components/DisplayProjects.vue'
-import AddProject from './components/AddProject.vue'
+import DisplayProducts from './components/DisplayProducts.vue'
+import AddProduct from './components/AddProduct.vue'
 </script>
 
 <template>
-  <DisplayProjects />
-  <AddProject />
+  <DisplayProducts />
+  <AddProduct />
 </template>
 
 <style scoped>
