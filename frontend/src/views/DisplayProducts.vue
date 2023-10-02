@@ -10,10 +10,51 @@ import {
 } from '@/components/ui/table'
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
-import {Product} from '@/interfaces/Product'
+import { Product } from '@/interfaces/Product'
 import AddProduct from '@/components/products/AddProduct.vue'
+import { Button } from '@/components/ui/button';
+import { useStore } from 'vuex';
 
 const products = ref<Product[]>([])
+
+const mockProducts = [
+  {
+    id: 1,
+    name: "Drawer",
+    color: "Red",
+    weight: 100,
+    width: 200,
+    height: 250,
+    depth: 100
+  },
+  {
+    id: 2,
+    name: "Drawer",
+    color: "Red",
+    weight: 100,
+    width: 200,
+    height: 250,
+    depth: 100
+  },
+  {
+    id: 3,
+    name: "Bed",
+    color: "Green",
+    weight: 100,
+    width: 200,
+    height: 250,
+    depth: 100
+  },
+  {
+    id: 4,
+    name: "Box",
+    color: "Blue",
+    weight: 233,
+    width: 2010,
+    height: 250,
+    depth: 100
+  }
+]
 
 onMounted(async () => {
   try {
@@ -23,6 +64,12 @@ onMounted(async () => {
     console.error(error)
   }
 })
+
+const store = useStore();
+
+const handleButtonClick = (product) => {
+  store.commit('addProduct', product);
+}
 </script>
 
 <template>
@@ -39,10 +86,11 @@ onMounted(async () => {
         <TableHead>Width</TableHead>
         <TableHead>Height</TableHead>
         <TableHead>Depth</TableHead>
+        <TableHead></TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="product in products" :key="product.id">
+      <TableRow v-for="product in mockProducts" :key="product.id">
         <TableCell class="font-medium">
           {{ product.id }}
         </TableCell>
@@ -52,6 +100,7 @@ onMounted(async () => {
         <TableCell>{{ product.width }}</TableCell>
         <TableCell>{{ product.height }}</TableCell>
         <TableCell>{{ product.depth }}</TableCell>
+        <TableCell><Button class="bg-green-400 hover:bg-green-600 active:bg-green-900" @click="handleButtonClick(product)">Order</Button></TableCell>
       </TableRow>
     </TableBody>
   </Table>

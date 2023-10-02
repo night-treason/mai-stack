@@ -16,7 +16,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <component
     :is="as"
-    :class="cn('hover:border-green-600', buttonVariants({ variant, size }), $attrs.class ?? '')"
+    :class="cn('hover:border-green-600 active:bg-slate-200', buttonVariants({ variant, size }), $attrs.class ?? '')"
   >
     <slot />
   </component>

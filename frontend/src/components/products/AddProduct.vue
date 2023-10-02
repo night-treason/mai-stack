@@ -40,10 +40,12 @@ const postData = () => {
     .then((response) => {
       console.log(response.data);
       isOpen.value = false;
+      isSending.value = false
     })
     .catch((error) => {
       console.error(error);
       isOpen.value = false;
+      isSending.value = false
     });
 };
 </script>
