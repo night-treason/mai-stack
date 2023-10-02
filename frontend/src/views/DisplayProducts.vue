@@ -11,6 +11,7 @@ import {
 import { ref, onMounted } from 'vue'
 import axios from 'axios';
 import {Product} from '@/interfaces/Product'
+import AddProduct from '@/components/products/AddProduct.vue'
 
 const products = ref<Product[]>([])
 
@@ -54,4 +55,5 @@ onMounted(async () => {
       </TableRow>
     </TableBody>
   </Table>
+  <AddProduct />
 </template>

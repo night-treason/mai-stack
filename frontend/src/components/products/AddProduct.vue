@@ -13,12 +13,15 @@ import { Input } from "@/components/ui/input";
 import { ref } from "vue";
 import axios from "axios";
 
+
 const name = ref("");
 const color = ref("")
 const weight = ref("")
 const width = ref("")
 const height = ref("")
 const depth = ref("")
+const isOpen = ref(false)
+const isSending = ref(false)
 
 const postData = () => {
   const inputData = {
@@ -30,23 +33,27 @@ const postData = () => {
     depth: depth.value,
   };
 
+  isSending.value = true
+
   axios
     .post("http://localhost:3000/products/add", inputData)
     .then((response) => {
       console.log(response.data);
+      isOpen.value = false;
     })
     .catch((error) => {
       console.error(error);
+      isOpen.value = false;
     });
 };
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="isOpen">
     <DialogTrigger asChild>
       <Button
         variant="outline"
-        class="mt-6 hover:border-green-600 focus:border-green-600"
+        class="mt-6"
         >Add</Button
       >
     </DialogTrigger>
@@ -68,9 +75,9 @@ const postData = () => {
         <Button
           variant="secondary"
           type="submit"
-          class="hover:border-green-600"
           @click="postData"
-          >Save changes</Button
+          v-model:disabled="isSending"
+          >{{ isSending ? 'Loading...' : 'Submit' }}</Button
         >
       </DialogFooter>
     </DialogContent>

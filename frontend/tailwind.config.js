@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   darkMode: ["class"],
   
@@ -19,7 +21,7 @@ module.exports = {
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: colors.green[600],
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

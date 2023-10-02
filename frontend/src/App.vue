@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import DisplayProducts from './components/DisplayProducts.vue'
-import AddProduct from './components/AddProduct.vue'
+import DisplayProducts from './views/DisplayProducts.vue'
+import Navbar from './components/ui/navbar/Navbar.vue'
 </script>
 
 <template>
+  <Navbar/>
   <DisplayProducts />
-  <AddProduct />
 </template>
 
 <style scoped>
