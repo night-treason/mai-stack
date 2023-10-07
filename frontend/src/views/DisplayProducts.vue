@@ -7,15 +7,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { ref, onMounted } from 'vue'
-import axios from 'axios';
-import { Product } from '@/interfaces/Product'
-import AddProduct from '@/components/products/AddProduct.vue'
-import { Button } from '@/components/ui/button';
-import { useStore } from 'vuex';
+} from "@/components/ui/table";
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { Product } from "@/interfaces/Product";
+import AddProduct from "@/components/products/AddProduct.vue";
+import { Button } from "@/components/ui/button";
+import { useStore } from "vuex";
+import DataTable from "@/components/products/table/DataTable.vue";
 
-const products = ref<Product[]>([])
+const products = ref<Product[]>([]);
 
 const mockProducts = [
   {
@@ -25,7 +26,8 @@ const mockProducts = [
     weight: 100,
     width: 200,
     height: 250,
-    depth: 100
+    depth: 100,
+    price: 2500,
   },
   {
     id: 2,
@@ -34,7 +36,8 @@ const mockProducts = [
     weight: 100,
     width: 200,
     height: 250,
-    depth: 100
+    depth: 100,
+    price: 3100,
   },
   {
     id: 3,
@@ -43,7 +46,8 @@ const mockProducts = [
     weight: 100,
     width: 200,
     height: 250,
-    depth: 100
+    depth: 100,
+    price: 1990,
   },
   {
     id: 4,
@@ -52,24 +56,25 @@ const mockProducts = [
     weight: 233,
     width: 2010,
     height: 250,
-    depth: 100
-  }
-]
+    depth: 100,
+    price: 1200,
+  },
+];
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/products')
-    products.value = response.data
+    const response = await axios.get("http://localhost:3000/products");
+    products.value = response.data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-})
+});
 
 const store = useStore();
 
 const handleButtonClick = (product) => {
-  store.commit('addProduct', product);
-}
+  store.commit("addProduct", product);
+};
 </script>
 
 <template>
@@ -77,16 +82,14 @@ const handleButtonClick = (product) => {
     <TableCaption>List of products</TableCaption>
     <TableHeader>
       <TableRow>
-        <TableHead class-name="w-[100px]">
-          Id
-        </TableHead>
+        <TableHead class-name="w-[100px]"> Id </TableHead>
         <TableHead>Name</TableHead>
         <TableHead>Color</TableHead>
         <TableHead>Weight</TableHead>
         <TableHead>Width</TableHead>
         <TableHead>Height</TableHead>
         <TableHead>Depth</TableHead>
-        <TableHead></TableHead>
+        <TableHead>Price</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -100,9 +103,17 @@ const handleButtonClick = (product) => {
         <TableCell>{{ product.width }}</TableCell>
         <TableCell>{{ product.height }}</TableCell>
         <TableCell>{{ product.depth }}</TableCell>
-        <TableCell><Button class="bg-green-400 hover:bg-green-600 active:bg-green-900" @click="handleButtonClick(product)">Order</Button></TableCell>
+        <TableCell>{{ product.price }}$</TableCell>
+        <TableCell
+          ><Button
+            class="bg-green-400 hover:bg-green-600 active:bg-green-900"
+            @click="handleButtonClick(product)"
+            >Order</Button
+          ></TableCell
+        >
       </TableRow>
     </TableBody>
   </Table>
   <AddProduct />
+  <DataTable :products="mockProducts"/>
 </template>

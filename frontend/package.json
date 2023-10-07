@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/vue-table": "^8.10.3",
     "@types/axios": "^0.14.0",
     "@types/vue": "^2.0.0",
     "@vueuse/core": "^10.4.1",

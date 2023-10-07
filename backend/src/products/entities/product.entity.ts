@@ -1,9 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { CartProduct } from 'src/carts/entities/carts-products.entity';
+import { Order } from 'src/orders/entities/order.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 
 @Entity('products')
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => CartProduct, cartProduct => cartProduct.product)
+  cartProducts: CartProduct[];
 
   @Column()
   name: string;
@@ -22,4 +27,7 @@ export class Product {
 
   @Column()
   depth: number;
+
+  @Column()
+  price: number;
 }

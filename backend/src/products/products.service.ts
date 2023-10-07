@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { CartProduct } from 'src/carts/entities/carts-products.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
+    @InjectRepository(CartProduct)
+    private cartsProductsRepository: Repository<CartProduct>
   ) {}
 
   findAll(): Promise<Product[]> {
@@ -40,4 +43,13 @@ export class ProductsService {
 
     return row;
   }
+
+  addToCart(cartProduct: CartProduct): Promise<CartProduct> {
+    return this.cartsProductsRepository.save(cartProduct);
+  }
+
+  getCartItems(cartId: string): Promise<CartProduct[]> {
+    return this.cartsProductsRepository.find({ where: { cart: cartId } });
+  }
+
 }

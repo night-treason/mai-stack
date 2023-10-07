@@ -4,6 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { Product } from './products/entities/product.entity';
+import { Order } from './orders/entities/order.entity';
+import { Cart } from './carts/entities/cart.entity';
+import { CartProduct } from './carts/entities/carts-products.entity';
 
 @Module({
   imports: [
@@ -13,9 +16,9 @@ import { Product } from './products/entities/product.entity';
       port: 5432,
       username: 'postgres',
       password: 'pass',
-      database: 'products',
-      synchronize: false,
-      entities: [Product],
+      database: 'test',
+      synchronize: true,
+      entities: [Product, Order, Cart, CartProduct],
     }),
     ProductsModule,
   ],
