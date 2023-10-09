@@ -1,8 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 import DisplayProducts from './views/DisplayProducts.vue'
 import DisplayOrders from './views/DisplayOrders.vue'
+import DisplayCart from './views/DisplayCart.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
+  { path: '/', redirect: '/products' },
   {
     path: '/products',
     name: 'DisplayProducts',
@@ -13,6 +15,11 @@ const routes = [
     name: 'DisplayOrders',
     component: DisplayOrders
   },
+  {
+    path: '/cart',
+    name: 'DisplayCart',
+    component: DisplayCart
+  }
 ]
 
 const router = createRouter({

@@ -44,12 +44,12 @@ export class ProductsService {
     return row;
   }
 
-  addToCart(cartProduct: CartProduct): Promise<CartProduct> {
-    return this.cartsProductsRepository.save(cartProduct);
-  }
-
-  getCartItems(cartId: string): Promise<CartProduct[]> {
-    return this.cartsProductsRepository.find({ where: { cart: cartId } });
-  }
-
+  // getCartItems(cartId: string): Promise<CartProduct[]> {
+  //   const parsedCartId = Number(cartId)
+  //   return this.cartsProductsRepository.find({ 
+  //     where: { 
+  //       id: parsedCartId 
+  //     } 
+  //   });
+  // }
 }

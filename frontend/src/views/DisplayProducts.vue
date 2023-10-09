@@ -14,7 +14,7 @@ import { Product } from "@/interfaces/Product";
 import AddProduct from "@/components/products/AddProduct.vue";
 import { Button } from "@/components/ui/button";
 import { useStore } from "vuex";
-import DataTable from "@/components/products/table/DataTable.vue";
+import DataTable from "@/components/products/table/ProductsTable.vue";
 
 const products = ref<Product[]>([]);
 
@@ -64,7 +64,7 @@ const mockProducts = [
 onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:3000/products");
-    products.value = response.data;
+    products.value = response.data.results;
   } catch (error) {
     console.error(error);
   }
@@ -78,7 +78,7 @@ const handleButtonClick = (product) => {
 </script>
 
 <template>
-  <Table>
+  <!-- <Table>
     <TableCaption>List of products</TableCaption>
     <TableHeader>
       <TableRow>
@@ -93,7 +93,7 @@ const handleButtonClick = (product) => {
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="product in mockProducts" :key="product.id">
+      <TableRow v-for="product in products" :key="product.id">
         <TableCell class="font-medium">
           {{ product.id }}
         </TableCell>
@@ -114,6 +114,7 @@ const handleButtonClick = (product) => {
       </TableRow>
     </TableBody>
   </Table>
-  <AddProduct />
-  <DataTable :products="mockProducts"/>
+  <AddProduct /> -->
+
+  <DataTable v-if="products.length" :products="products"/>
 </template>

@@ -6,4 +6,11 @@ export interface Product {
     width: number
     height: number
     depth: number
+    price: number
+}
+
+export interface CartProduct {
+    id: number
+    product: Product
+    quantity: number
 }

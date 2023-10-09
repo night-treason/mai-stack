@@ -6,14 +6,14 @@
                     Продукты
                 </li>
             </router-link>
-            <router-link to="/orders">
-                <li class="p-4 hover:border-b-2 hover:border-green-600 text-black">
-                    Заказы
-                </li>
-            </router-link>
             <router-link to="/cart">
                 <li class="p-4 hover:border-b-2 hover:border-green-600 text-black">
                     Корзина
+                </li>
+            </router-link>
+            <router-link to="/orders">
+                <li class="p-4 hover:border-b-2 hover:border-green-600 text-black">
+                    Заказы
                 </li>
             </router-link>
         </ul>

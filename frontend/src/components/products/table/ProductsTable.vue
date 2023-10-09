@@ -24,13 +24,20 @@ import {
 import { h, ref } from "vue";
 import { Product } from "@/interfaces/Product";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
-const props = defineProps<{ products: Product[] }>();
-const data = props.products;
+const { products } = defineProps<{ products: Product[] }>();
 
-console.log(data);
+const addHandler = async (product) => {
+    try {
+      const response = await axios.post("http://localhost:3000/cart/products", {product: product.id, cart: 1, quantity: 1});
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+};
 
-const columns: ColumnDef<Product[]>[] = [
+const columns: ColumnDef<Product, any>[] = [
   {
     accessorKey: "id",
     header: "Id",
@@ -82,7 +89,7 @@ const columns: ColumnDef<Product[]>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => h(Button, {class: "bg-green-400 hover:bg-green-600 active:bg-green-900"}, ['Order']),
+    cell: ({ row }) => h(Button, { class: "bg-green-400 hover:bg-green-600 active:bg-green-900", onClick: () => addHandler(row.original) }, ['Добавить']),
   },
 ];
 
@@ -92,7 +99,7 @@ const columnVisibility = ref<VisibilityState>({});
 const rowSelection = ref({});
 
 const table = useVueTable({
-  data,
+  data: products,
   columns,
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
@@ -104,31 +111,18 @@ const table = useVueTable({
 <template>
   <Table>
     <TableHeader>
-      <TableRow
-        v-for="headerGroup in table.getHeaderGroups()"
-        :key="headerGroup.id"
-      >
+      <TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
         <TableHead v-for="header in headerGroup.headers" :key="header.id">
-          <FlexRender
-            v-if="!header.isPlaceholder"
-            :render="header.column.columnDef.header"
-            :props="header.getContext()"
-          />
+          <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header"
+            :props="header.getContext()" />
         </TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <template v-if="table.getRowModel().rows?.length">
-        <TableRow
-          v-for="row in table.getRowModel().rows"
-          :key="row.id"
-          :data-state="row.getIsSelected() && 'selected'"
-        >
+        <TableRow v-for="row in table.getRowModel().rows" :key="row.id" :data-state="row.getIsSelected() && 'selected'">
           <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-            <FlexRender
-              :render="cell.column.columnDef.cell"
-              :props="cell.getContext()"
-            />
+            <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
           </TableCell>
         </TableRow>
       </template>
