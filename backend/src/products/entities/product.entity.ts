@@ -1,4 +1,5 @@
-import { CartProduct } from 'src/carts/entities/carts-products.entity';
+import { CartProduct } from 'src/intermediates/entities/carts-products.entity';
+import { OrderProduct } from 'src/intermediates/entities/orders-products.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 
@@ -8,7 +9,10 @@ export class Product {
   id: number;
 
   @OneToMany(() => CartProduct, cartProduct => cartProduct.product)
-  cartProducts: CartProduct[];
+  cartsProducts: CartProduct[];
+  
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.product)
+  ordersProducts: OrderProduct[];
 
   @Column()
   name: string;

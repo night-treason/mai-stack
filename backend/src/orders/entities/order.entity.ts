@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import { OrderProduct } from 'src/intermediates/entities/orders-products.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 
 @Entity('orders')
@@ -6,13 +7,19 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Cart)
+  @ManyToOne(() => Cart, cart => cart.orders)
   @JoinColumn({ name: 'cart_id' })
-  cart: Cart;
+  cart: Cart[];
+
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order)
+  products: OrderProduct[];
 
   @Column()
   status: string;
 
   @Column()
-  created_at: number;
+  total_sum: number;
+
+  @Column()
+  total_amount: number;
 }

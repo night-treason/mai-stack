@@ -1,5 +1,6 @@
-import { CartProduct } from "src/carts/entities/carts-products.entity";
+import { CartProduct } from "src/intermediates/entities/carts-products.entity";
 import { Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Order } from "src/orders/entities/order.entity";
 
 @Entity('carts')
 export class Cart {
@@ -7,5 +8,8 @@ export class Cart {
   id: number;
 
   @OneToMany(() => CartProduct, cartProduct => cartProduct.cart)
-  cartProducts: CartProduct[];
+  cartsProducts: CartProduct[];
+
+  @OneToMany(() => Order, order => order.cart)
+  orders: Order[];
 }

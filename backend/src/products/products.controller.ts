@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Res } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { Response } from 'express';
-import { CartProduct } from 'src/carts/entities/carts-products.entity';
+import { CartProduct } from 'src/intermediates/entities/carts-products.entity';
 
 @Controller('products')
 export class ProductsController {

@@ -1,26 +1,19 @@
-// import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
-// import { ProductsService } from './orders.service';
-// import { Product } from './entities/order.entity';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import { OrdersService } from './orders.service';
+import { Order } from './entities/order.entity';
+import { OrderResDTO } from './dto/order.dto';
 
-// @Controller('products')
-// export class ProductsController {
-//   constructor(private readonly productsService: ProductsService) {}
+@Controller('orders')
+export class OrdersController {
+  constructor(private readonly ordersService: OrdersService) {}
 
-//   @Get()
-//   findAll(): Promise<Product[]> {
-//     return this.productsService.findAll();
-//   }
+  @Get()
+  getCartItems(): Promise<Order[]> {
+    return this.ordersService.getOrders();
+  }
 
-//   @Post('add')
-//   create(@Body() product: Product): Promise<Product>{
-//     return this.productsService.create(product)
-//   }
-
-//   @Patch(':id')
-//   update(
-//   @Param('id') id: number,
-//   @Body() newData: Partial<Product>): Promise<Product>{
-//     return this.productsService.update(id, newData)
-//   }
-
-// }
+  @Post()
+  createOrderFromCart(): Promise<Order> {
+    return this.ordersService.createOrderFromCart();
+  }
+}

@@ -1,43 +1,80 @@
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { Order } from './entities/order.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Order } from './entities/order.entity';
+import { CartProduct } from 'src/intermediates/entities/carts-products.entity';
+import { OrderProductDTO, OrderResDTO } from './dto/order.dto';
+import { OrderProduct } from 'src/intermediates/entities/orders-products.entity';
+import { plainToClass } from 'class-transformer';
 
-// // @Injectable()
-// // export class ProductsService {
-// //   constructor(
-// //     @InjectRepository(Product)
-// //     private productsRepository: Repository<Product>,
-// //   ) {}
+@Injectable()
+export class OrdersService {
+  constructor(
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
+    @InjectRepository(CartProduct)
+    private readonly cartProductRepository: Repository<CartProduct>,
+    @InjectRepository(CartProduct)
+    private readonly orderProductRepository: Repository<OrderProduct>,
+  ) {}
 
-// //   findAll(): Promise<Product[]> {
-// //     return this.productsRepository.find();
-// //   }
+  async createOrderFromCart(): Promise<Order> {
+    const testCartId = 1;
 
-// //   create(product: Product): Promise<Product> {
-// //     return this.productsRepository.save(product);
-// //   }
+    let totalAmount = 0;
+    let totalSum = 0;
 
-// //   async update(id: number, newData: Partial<Product>): Promise<Product> {
-// //     // const row = await this.productsRepository.findOne(id);
+    const cartProducts = await this.cartProductRepository.find({
+      where: { cart: { id: testCartId } },
+      relations: { product: true },
+    });
+    const order = this.orderRepository.create({ status: 'New', total_amount: totalAmount, total_sum: totalSum });
+    await this.orderRepository.save(order);
 
-// //     // if (!row) {
-// //     //   throw new Error('Row not found.');
-// //     // }
+    for (const cartProduct of cartProducts) {
+      const orderProduct = this.orderProductRepository.create({
+        order: order,
+        product: cartProduct.product,
+        quantity: cartProduct.quantity,
+      });
+      await this.orderProductRepository.save(orderProduct);
 
-// //     // await this.productsRepository.update(id, newData);
-// //     // return this.productsRepository.findOne(id);
-// //     const row = await this.productsRepository
-// //       .createQueryBuilder()
-// //       .update(Product)
-// //       .returning('*')
-// //       .set(newData)
-// //       .where('products.id = :id', { id })
-// //       .execute()
-// //       .then((res) => {
-// //         return res.raw[0];
-// //       });
+      totalAmount += orderProduct.quantity;
+      totalSum += orderProduct.product.price;
 
-// //     return row;
-// //   }
-// // }
+      await this.cartProductRepository.remove(cartProduct);
+    }
+
+    // const updatedOrderProducts = await this.orderProductRepository.find({
+    //   where: { order: { id: order.id } },
+    //   relations: { product: true },
+    // });
+    // const updatedTotalAmount = updatedOrderProducts.reduce(
+    //   (amount, orderProduct) => amount + orderProduct.quantity,
+    //   0,
+    // );
+    // const updatedTotalSum = updatedOrderProducts.reduce(
+    //   (sum, orderProduct) => sum + orderProduct.product.price,
+    //   0,
+    // );
+
+    await this.orderRepository.update(order.id, {
+      total_amount: totalAmount,
+      total_sum: totalSum,
+    });
+
+    const updatedOrder = await this.orderRepository.findOne({
+      where: { id: order.id },
+    });
+    
+    return updatedOrder;
+  }
+
+  async getOrders(): Promise<Order[]> {
+    const orders = await this.orderRepository.find({ 
+        relations: ["products.product"] 
+    });
+
+    return orders;
+  }
+}

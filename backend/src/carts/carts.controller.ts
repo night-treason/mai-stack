@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Res, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CartProduct } from 'src/carts/entities/carts-products.entity';
+import { CartProduct } from 'src/intermediates/entities/carts-products.entity';
 import { CartsService } from './carts.service';
 import { Response } from 'express';
 import { CartProductDTO, CartProductResDTO } from './dto/carts-products.dto';
