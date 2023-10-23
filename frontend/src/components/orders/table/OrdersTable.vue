@@ -33,7 +33,16 @@ import {
 import { Order } from "@/interfaces/Order";
 
 const { orders } = defineProps<{ orders: Order[] }>();
-// const emit = defineEmits(["product-deleted", "amount-changed"]);
+const emit = defineEmits(["order-deleted"]);
+
+const deleteHandler = async (id) => {
+	try {
+		await axios.delete("http://localhost:3000/orders/" + id);
+		emit("order-deleted");
+	} catch (error) {
+		console.error(error);
+	}
+};
 
 const columns: ColumnDef<Order, any>[] = [
 	{
@@ -56,16 +65,16 @@ const columns: ColumnDef<Order, any>[] = [
 		header: "Status",
 		cell: ({ row }) => h("div", row.original.status),
 	},
-	// {
-	// 	id: "action",
-	// 	cell: ({ row }) =>
-	// 		h(FontAwesomeIcon, {
-	// 			icon: faTrash,
-	// 			size: "lg",
-	// 			style: { color: "#67778d", cursor: "pointer" },
-	// 			onClick: () => deleteHandler(row.original.id),
-	// 		}),
-	// },
+	{
+		id: "action",
+		cell: ({ row }) =>
+			h(FontAwesomeIcon, {
+				icon: faTrash,
+				size: "lg",
+				style: { color: "#67778d", cursor: "pointer" },
+				onClick: () => deleteHandler(row.original.id),
+			}),
+	},
 ];
 
 const sorting = ref<SortingState>([]);

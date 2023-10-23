@@ -11,7 +11,7 @@ export class Order {
   @JoinColumn({ name: 'cart_id' })
   cart: Cart[];
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order)
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order, {cascade: true})
   products: OrderProduct[];
 
   @Column()

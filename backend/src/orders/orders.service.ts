@@ -33,14 +33,20 @@ export class OrdersService {
 
     for (const cartProduct of cartProducts) {
       const orderProduct = this.orderProductRepository.create({
-        order: order,
         product: cartProduct.product,
         quantity: cartProduct.quantity,
-      });
-      await this.orderProductRepository.save(orderProduct);
+      }); 
+
+      if (!order.products) {
+        order.products = [];
+      }
+      
+      order.products.push(orderProduct);
+      
+      await this.orderRepository.save(order);
 
       totalAmount += orderProduct.quantity;
-      totalSum += orderProduct.product.price;
+      totalSum += orderProduct.product.price * totalAmount;
 
       await this.cartProductRepository.remove(cartProduct);
     }
@@ -66,6 +72,8 @@ export class OrdersService {
     const updatedOrder = await this.orderRepository.findOne({
       where: { id: order.id },
     });
+
+    console.log(updatedOrder);
     
     return updatedOrder;
   }
@@ -76,5 +84,14 @@ export class OrdersService {
     });
 
     return orders;
+  }
+
+  async deleteOrder(orderId: string) {
+    const order = await this.orderRepository.findOne({ 
+      where: { id: Number(orderId) },
+      relations: ["products"] 
+    });
+
+    await this.orderRepository.remove(order)
   }
 }

@@ -23,6 +23,6 @@ onMounted(fetchOrders);
 </script>
 
 <template>
-  <OrdersTable v-if="orders.length" :orders="orders" :key="renderKey"/>
+  <OrdersTable v-if="orders.length" :orders="orders" :key="renderKey" @order-deleted="fetchOrders"/>
   <div v-else>Заказов нет</div>
 </template>

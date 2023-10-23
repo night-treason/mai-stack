@@ -32,8 +32,6 @@ export class CartsService {
     const cart = await this.cartsRepository.findOneBy({ id: CartProduct.cart });
     const product = await this.productsRepository.findOneBy({ id: CartProduct.product });
 
-    console.log(CartProduct, cart, product);
-
     if (!cart || !product) {
       throw new Error('Cart or Product not found.');
     }
