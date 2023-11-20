@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import { CartProduct } from 'src/intermediates/entities/carts-products.entity';
+import { ProductsProducerService } from './products-producer.service';
+import { ProductsConsumerService } from './products-consumer.serrvice';
 
 @Injectable()
 export class ProductsService {
@@ -10,15 +12,23 @@ export class ProductsService {
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
     @InjectRepository(CartProduct)
-    private cartsProductsRepository: Repository<CartProduct>
+    private cartsProductsRepository: Repository<CartProduct>,
+    private readonly productsProducerService: ProductsProducerService,
+    private readonly productsConsumerService: ProductsConsumerService,
   ) {}
 
   findAll(): Promise<Product[]> {
     return this.productsRepository.find();
   }
 
-  create(product: Product): Promise<Product> {
-    return this.productsRepository.save(product);
+  async create(product: Product): Promise<Product> {
+    const createdProduct = await this.productsRepository.save(product);
+
+    await this.productsProducerService.sendProductCreatedMessage(
+      createdProduct,
+    );
+
+    return createdProduct;
   }
 
   async update(id: number, newData: Partial<Product>): Promise<Product> {
@@ -46,10 +56,10 @@ export class ProductsService {
 
   // getCartItems(cartId: string): Promise<CartProduct[]> {
   //   const parsedCartId = Number(cartId)
-  //   return this.cartsProductsRepository.find({ 
-  //     where: { 
-  //       id: parsedCartId 
-  //     } 
+  //   return this.cartsProductsRepository.find({
+  //     where: {
+  //       id: parsedCartId
+  //     }
   //   });
   // }
 }
